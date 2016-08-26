@@ -14,8 +14,8 @@ namespace AmazonSearch.Controllers
         public ActionResult ProductSearch()
         {
             var authentication = new AmazonAuthentication();
-            authentication.AccessKey = "AKIAI6FV3NUY3BEI2FZA";
-            authentication.SecretKey = "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";
+            authentication.AccessKey = "--";
+            authentication.SecretKey = "---";
 
             var wrapper = new AmazonWrapper(authentication, AmazonEndpoint.UK);
             var result = wrapper.Search("ball", AmazonSearchIndex.All, AmazonResponseGroup.Large);
