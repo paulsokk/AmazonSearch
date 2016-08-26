@@ -2,6 +2,7 @@
 using Nager.AmazonProductAdvertising.Model;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -10,15 +11,34 @@ namespace AmazonSearch.Controllers
 {
     public class ProductSearchController : Controller
     {
+
+        private AmazonAuthentication GetConfig()
+        {
+            var accessKey = ConfigurationManager.AppSettings["AKIAJ3HVK3BZHWILSSOA"];
+            var secretKey = ConfigurationManager.AppSettings["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"];
+
+            var authentication = new AmazonAuthentication();
+            authentication.AccessKey = accessKey;
+            authentication.SecretKey = secretKey;
+
+            return authentication;
+        }
+
         // GET: ProductSearch
         public ActionResult ProductSearch()
         {
-            var authentication = new AmazonAuthentication();
-            authentication.AccessKey = "AKIAI6FV3NUY3BEI2FZA";
-            authentication.SecretKey = "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";
+            string search = "canon";
 
-            var wrapper = new AmazonWrapper(authentication, AmazonEndpoint.UK);
-            var result = wrapper.Search("ball", AmazonSearchIndex.All, AmazonResponseGroup.Large);
+            ViewBag.Search = search;
+
+            //var authentication = this.GetConfig();
+            var authentication = new AmazonAuthentication();
+            authentication.AccessKey = "***";
+            authentication.SecretKey = "***";
+
+            var wrapper = new AmazonWrapper(authentication, AmazonEndpoint.UK, "***");
+            var responseGroup = AmazonResponseGroup.ItemAttributes | AmazonResponseGroup.Images | AmazonResponseGroup.Offers;
+            var result = wrapper.Search(search, AmazonSearchIndex.All, responseGroup);
 
             return View(result);
             //return Content("Hello world?");
