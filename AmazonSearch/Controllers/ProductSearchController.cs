@@ -12,40 +12,33 @@ namespace AmazonSearch.Controllers
     public class ProductSearchController : Controller
     {
 
-        private AmazonAuthentication GetConfig()
-        {
-            var accessKey = ConfigurationManager.AppSettings["AKIAJ3HVK3BZHWILSSOA"];
-            var secretKey = ConfigurationManager.AppSettings["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"];
-
-            var authentication = new AmazonAuthentication();
-            authentication.AccessKey = accessKey;
-            authentication.SecretKey = secretKey;
-
-            return authentication;
-        }
-
         // GET: ProductSearch
-        public ActionResult ProductSearch()
+        public ActionResult ProductSearch(string keyword)
         {
-            string search = "canon";
+            if (String.IsNullOrEmpty(keyword))
+            {
+                return View();
+            }
+            
 
-            ViewBag.Search = search;
 
-            //var authentication = this.GetConfig();
+            ViewBag.Search = keyword;
+
             var authentication = new AmazonAuthentication();
-            authentication.AccessKey = "***";
-            authentication.SecretKey = "***";
+            authentication.AccessKey = "ABC";
+            authentication.SecretKey = "ABC";
 
-            var wrapper = new AmazonWrapper(authentication, AmazonEndpoint.UK, "***");
-            var responseGroup = AmazonResponseGroup.ItemAttributes | AmazonResponseGroup.Images | AmazonResponseGroup.Offers;
-            var result = wrapper.Search(search, AmazonSearchIndex.All, responseGroup);
+            var wrapper = new AmazonWrapper(authentication, AmazonEndpoint.UK, "ABC");
+            var responseGroup = AmazonResponseGroup.ItemAttributes | AmazonResponseGroup.Images | AmazonResponseGroup.Offers | AmazonResponseGroup.OfferFull;
+            var searchOperation = wrapper.ItemSearchOperation(keyword, AmazonSearchIndex.All, responseGroup);
+            //var result = wrapper.Search(keyword, AmazonSearchIndex.All, responseGroup);
+            searchOperation.Skip(1);
+            var xml = wrapper.Request(searchOperation);
+
+            var result = XmlHelper.ParseXml<ItemSearchResponse>(xml.Content);
 
             return View(result);
             //return Content("Hello world?");
-        }
-
-        public ActionResult Test() {
-            return Content("This is test!");
         }
     }
 }

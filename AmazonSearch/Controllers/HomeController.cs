@@ -33,5 +33,12 @@ namespace AmazonSearch.Controllers
 
             return View();
         }
+
+        public ActionResult ProductSearch()
+        {
+            ViewBag.Message = "Here you can search for Amazon products:";
+
+            return View();
+        }
     }
 }

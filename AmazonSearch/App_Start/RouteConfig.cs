@@ -14,6 +14,12 @@ namespace AmazonSearch
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+                name: "ProductSearch",
+                url: "ProductSearch/ProductSearch/{keyword}",
+                defaults: new { controller = "ProductSearch", action = "ProductSearch" }
+            );
+
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }

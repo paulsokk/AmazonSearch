@@ -26,16 +26,20 @@
             @if (Model.Items != null && Model.Items.Item != null)
             {
                 int count = 1;
+                <h4>Total pages: @Model.Items.TotalPages</h4>
                 foreach (var item in Model.Items.Item)
                 {
+                    if (item.OfferSummary.LowestNewPrice != null)
+                    {
+                        <tr>
+                            <td>@count</td>
+                            <td><img src="@item.MediumImage" /></td>
+                            <td><h4>@item.ItemAttributes.Title</h4></td>
+                            <td><h4>@item.OfferSummary.LowestNewPrice.FormattedPrice</h4></td>
+                        </tr>
+                        count++;
+                    }
 
-                    <tr>
-                        <td>@count</td>
-                        <td><img src="@item.MediumImage" /></td>
-                        <td><h4>@item.ItemAttributes.Title</h4></td>
-                        <td><h4>@item.OfferSummary.LowestNewPrice.FormattedPrice</h4></td>
-                    </tr>
-                    count++;
                 }
             }
 
