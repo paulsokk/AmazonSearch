@@ -15,7 +15,7 @@ namespace AmazonSearch
 
             routes.MapRoute(
                 name: "ProductSearch",
-                url: "ProductSearch/ProductSearch/{keyword}",
+                url: "ProductSearch/ProductSearch/{keyword}/{page}",
                 defaults: new { controller = "ProductSearch", action = "ProductSearch" }
             );
 

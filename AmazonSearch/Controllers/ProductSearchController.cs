@@ -13,16 +13,28 @@ namespace AmazonSearch.Controllers
     {
 
         // GET: ProductSearch
-        public ActionResult ProductSearch(string keyword)
+        public ActionResult ProductSearch(string keyword, string page)
         {
             if (String.IsNullOrEmpty(keyword))
             {
                 return View();
             }
-            
 
+            int pageNum = Int32.Parse(page);
+            if (pageNum  < 1)
+            {
+                pageNum = 1;
+            }
+            else if(pageNum > 6)
+            {
+                pageNum = 6;
+            }
 
+            //Send to view
             ViewBag.Search = keyword;
+            ViewBag.Page = pageNum;
+            ViewBag.NextPage = pageNum+1;
+            ViewBag.PrevPage = pageNum-1;
 
             var authentication = new AmazonAuthentication();
             authentication.AccessKey = "ABC";
@@ -32,9 +44,8 @@ namespace AmazonSearch.Controllers
             var responseGroup = AmazonResponseGroup.ItemAttributes | AmazonResponseGroup.Images | AmazonResponseGroup.Offers | AmazonResponseGroup.OfferFull;
             var searchOperation = wrapper.ItemSearchOperation(keyword, AmazonSearchIndex.All, responseGroup);
             //var result = wrapper.Search(keyword, AmazonSearchIndex.All, responseGroup);
-            searchOperation.Skip(1);
+            searchOperation.Skip(pageNum);
             var xml = wrapper.Request(searchOperation);
-
             var result = XmlHelper.ParseXml<ItemSearchResponse>(xml.Content);
 
             return View(result);
