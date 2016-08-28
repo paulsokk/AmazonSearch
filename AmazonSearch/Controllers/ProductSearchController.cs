@@ -20,6 +20,7 @@ namespace AmazonSearch.Controllers
                 return View();
             }
 
+            //Makes sure when the user types the url out of bounds, it returns the user to page 1-6
             int pageNum = Int32.Parse(page);
             if (pageNum  < 1)
             {
