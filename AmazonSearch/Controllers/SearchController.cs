@@ -9,11 +9,11 @@ using System.Web.Mvc;
 
 namespace AmazonSearch.Controllers
 {
-    public class ProductSearchController : Controller
+    public class ProductsController : Controller
     {
 
-        // GET: ProductSearch
-        public ActionResult ProductSearch(string keyword, string page)
+        // GET: Search
+        public ActionResult Search(string keyword, string page, string currency)
         {
             if (String.IsNullOrEmpty(keyword))
             {
@@ -36,6 +36,7 @@ namespace AmazonSearch.Controllers
             ViewBag.Page = pageNum;
             ViewBag.NextPage = pageNum+1;
             ViewBag.PrevPage = pageNum-1;
+            ViewBag.Currency = currency;
 
             var authentication = new AmazonAuthentication();
             authentication.AccessKey = "ABC";

@@ -1,6 +1,6 @@
 ﻿@model Nager.AmazonProductAdvertising.Model.AmazonItemResponse
 @{
-    ViewBag.Title = "ProductSearch";
+    ViewBag.Title = "Products";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -8,26 +8,26 @@
 
 @if (Model != null)
 {
-<h2>Search results: </h2>
-<p>Select currency:</p>
-<div id="currency"></div>
+    <h2>Search results: </h2>
+    <p>Select currency:</p>
+    <div id="currency"></div>
 
 
-<table class="table table-striped table-hover ">
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>Picture</th>
-            <th>Name</th>
-            <th>Price</th>
-        </tr>
-    </thead>
-    <tbody>
+    <table class="table table-striped table-hover ">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Picture</th>
+                <th>Name</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
             @*Search is made successfully*@
             @if (Model.Items != null && Model.Items.Item != null)
             {
                 int count = 1;
-                
+
                 <h5>Current page: @ViewBag.Page</h5>
 
                 foreach (var item in Model.Items.Item)
@@ -46,27 +46,29 @@
                 }
             }
 
-                   
-    </tbody>
-</table>
 
-<h5>Current page: @ViewBag.Page</h5>
+        </tbody>
+    </table>
 
-<ul class="pager">
-    @{ if (ViewBag.Page > 1)
-        {
-            <li><a href="/ProductSearch/ProductSearch?keyword=@ViewBag.Search&page=@ViewBag.PrevPage">Previous</a></li>
+    <h5>Current page: @ViewBag.Page</h5>
+
+    <ul class="pager">
+        @{ if (ViewBag.Page > 1)
+            {
+                
+                <li><a id="previous" href="/Products/Search?keyword=@ViewBag.Search&page=@ViewBag.PrevPage&currency=@ViewBag.Currency">Previous</a></li>
+            }
         }
-    }
-    @{if (ViewBag.Page < 5)
-        {
-            <li><a href="/ProductSearch/ProductSearch?keyword=@ViewBag.Search&page=@ViewBag.NextPage">Next</a></li>
+        @{if (ViewBag.Page < 5)
+            {
+                
+                <li><a id="next" rel="preload" href="/Products/Search?keyword=@ViewBag.Search&page=@ViewBag.NextPage&currency=@ViewBag.Currency">Next</a></li>
+            }
         }
-    }
-</ul>
+    </ul>
 
-}
-@*The search has not been made (successfully)*@
+            }
+            @*The search has not been made (successfully)*@
 else
 {
     <h3>No result</h3>
