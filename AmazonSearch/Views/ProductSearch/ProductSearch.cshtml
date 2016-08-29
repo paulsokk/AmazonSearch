@@ -38,7 +38,7 @@
                             <td>@count</td>
                             <td><img src="@item.MediumImage" /></td>
                             <td><h4><a href="@item.DetailPageURL">@item.ItemAttributes.Title</a></h4></td>
-                            <td><h4>@item.OfferSummary.LowestNewPrice.FormattedPrice</h4></td>
+                            <td><h4 class='productPrice'>@item.OfferSummary.LowestNewPrice.Amount</h4></td>
                         </tr>
                         count++;
                     }
