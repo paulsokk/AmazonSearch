@@ -15,6 +15,12 @@ namespace AmazonSearch.Controllers
         // GET: Search
         public ActionResult Search(string keyword, string page, string currency)
         {
+
+            //KEYS
+            string amazonAccessKey = "ABC";
+            string amazonSecretKey = "ABC";
+            string associateTag = "ABC";
+
             if (String.IsNullOrEmpty(keyword))
             {
                 return View();
@@ -31,27 +37,27 @@ namespace AmazonSearch.Controllers
                 pageNum = 6;
             }
 
-            //Send to view
+            //Send info to view
             ViewBag.Search = keyword;
             ViewBag.Page = pageNum;
             ViewBag.NextPage = pageNum+1;
             ViewBag.PrevPage = pageNum-1;
             ViewBag.Currency = currency;
 
+            //Authentication with keys
             var authentication = new AmazonAuthentication();
-            authentication.AccessKey = "ABC";
-            authentication.SecretKey = "ABC";
+            authentication.AccessKey = amazonAccessKey;
+            authentication.SecretKey = amazonSecretKey;
 
-            var wrapper = new AmazonWrapper(authentication, AmazonEndpoint.UK, "ABC");
+            //API request
+            var wrapper = new AmazonWrapper(authentication, AmazonEndpoint.UK, associateTag);
             var responseGroup = AmazonResponseGroup.ItemAttributes | AmazonResponseGroup.Images | AmazonResponseGroup.Offers | AmazonResponseGroup.OfferFull;
             var searchOperation = wrapper.ItemSearchOperation(keyword, AmazonSearchIndex.All, responseGroup);
-            //var result = wrapper.Search(keyword, AmazonSearchIndex.All, responseGroup);
             searchOperation.Skip(pageNum);
             var xml = wrapper.Request(searchOperation);
             var result = XmlHelper.ParseXml<ItemSearchResponse>(xml.Content);
 
             return View(result);
-            //return Content("Hello world?");
         }
     }
 }

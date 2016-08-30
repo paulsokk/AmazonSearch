@@ -23,7 +23,7 @@
             </tr>
         </thead>
         <tbody>
-            @*Search is made successfully*@
+            @*If search is made successfully*@
             @if (Model.Items != null && Model.Items.Item != null)
             {
                 int count = 1;
@@ -67,9 +67,9 @@
         }
     </ul>
 
-            }
-            @*The search has not been made (successfully)*@
-else
-{
-    <h3>No result</h3>
-}
+    }
+    @*If the search was not made (successfully)*@
+    else
+    {
+        <h3>No result</h3>
+    }

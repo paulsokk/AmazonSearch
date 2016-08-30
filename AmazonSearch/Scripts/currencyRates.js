@@ -4,12 +4,11 @@ var pageCurrency;
 
 $(document).ready(function () {
 
+    //Sets display currency on page load
     pageCurrency = getUrlVars()["currency"];
-    //console.log(currency);
     if (pageCurrency == undefined) {
         pageCurrency = "GBP"
     }
-    //console.log(pageCurrency);
 
     $('.productPrice').each(function () {
         this.innerHTML = Number(parseFloat(this.innerHTML) / 100.0).toFixed(2) + " " + pageCurrency;
@@ -19,9 +18,7 @@ $(document).ready(function () {
 });
 
 
-///
-//Getting currency rates
-///
+//Getting currency rates from API
 $.ajax({
     url: 'https://openexchangerates.org/api/latest.json?app_id='+app_id,
     dataType: 'json',
@@ -30,11 +27,8 @@ $.ajax({
     success: function (data) {
         
         dataObject = data;
-
-        //How to get a specific rate from json object
-        //console.log(data.rates["GBP"]);
         
-        //Building a select element 
+        //Building a select element with all available currencies 
         var listHTMLString = "<select>";
         var i = 0;
         //Grabbing all possible currency tags
@@ -45,7 +39,6 @@ $.ajax({
             }
            
             listHTMLString += "<option "+ selectedVal +" >" + Object.keys(data.rates)[i] + "</option>";
-            //console.log(Object.keys(data.rates)[i]);
             i++;
         });
         listHTMLString += "</select>";
@@ -60,12 +53,6 @@ $.ajax({
 });
 
 
-
-
-///
-//Currency conversion
-///
-
 var fromCurrency = "GBP";
 var toCurrency;
 var x;
@@ -75,11 +62,16 @@ var y;
 $('#currency').on('change', function () {
 
     setPrices();
-    
+   
 });
 
 
 
+///
+//Functions
+///
+
+//Returns all variables from URL query
 function getUrlVars() {
     var vars = [], hash;
     var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
@@ -91,6 +83,8 @@ function getUrlVars() {
     return vars;
 }
 
+
+//Converts prices from one currency to another
 function setPrices() {
     //Remembers previous currency
     if (toCurrency !== undefined) {
@@ -100,8 +94,8 @@ function setPrices() {
     //From oldXXX to USD ratio
     x = 1 / dataObject.rates[fromCurrency];
 
-    toCurrency = $("#currency option:selected").text(); // or $(this).val()
-    console.log(fromCurrency + " to " + toCurrency);
+    toCurrency = $("#currency option:selected").text();
+    //console.log(fromCurrency + " to " + toCurrency);
 
     $('.productPrice').each(function () {
 
@@ -124,16 +118,14 @@ function setPrices() {
         var nextPage = parseInt(getUrlVars()["page"]) + 1;
         var prevPage = parseInt(getUrlVars()["page"]) - 1;
 
-
+        //Setting up "Previous" button's href, so that keyword, page number and currency are passed to the previous page through URL query
         var prevParams = { 'keyword': keyword, 'page': prevPage, 'currency': toCurrency };
         var prevURL = "/Products/Search?" + jQuery.param(prevParams);
         $('#previous').attr("href", prevURL);
 
+        //Setting up "Next" button's href, so that keyword, page number and currency are passed to the next page through URL query
         var nextParams = { 'keyword': keyword, 'page': nextPage, 'currency': toCurrency };
         var nextURL = "/Products/Search?" + jQuery.param(nextParams);
         $('#next').attr("href", nextURL);
-
-
     });
-
 }
